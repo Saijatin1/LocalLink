@@ -16,6 +16,8 @@ hyperlocal-platform/
 │   ├── delivery-service/
 │   ├── conversational-agent/       # NEW — component A
 │   └── batching-optimizer/         # NEW — component B
+│   └── knowledge-graph/         # NEW — component C
+│   └── recommendation-engine/         # NEW — component D
 │
 ├── shared/
 │   ├── models/          # shared Pydantic schemas
