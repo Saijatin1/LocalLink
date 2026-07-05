@@ -1,0 +1,18 @@
+# Environment
+.env
+*.env
+**/.env
+
+# Node
+node_modules/
+**/node_modules/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Build
+dist/
+build/
