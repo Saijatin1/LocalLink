@@ -16,6 +16,8 @@ hyperlocal-platform/
 │   ├── delivery-service/
 │   ├── conversational-agent/       # NEW — component A
 │   └── batching-optimizer/         # NEW — component B
+│   └── knowledge-graph/         # NEW — component C
+│   └── recommendation-engine/         # NEW — component D
 │
 ├── shared/
 │   ├── models/          # shared Pydantic schemas
@@ -140,6 +142,111 @@ Each service is a standalone FastAPI app:
 - Behavior as order volume scales (10 vs 50 vs 100 concurrent orders) — this gives you a nice scaling chart for the paper
 
 ---
+## 3.3 Hyperlocal Knowledge Graph
+
+**What it does:** The Hyperlocal Knowledge Graph (HKG) provides a semantic representation of the entire hyperlocal commerce ecosystem by modeling relationships among customers, merchants, products, neighborhoods, delivery partners, traffic conditions, weather, seasonal trends, and purchasing behavior. Instead of treating these entities as isolated database records, the graph enables contextual reasoning across multiple data sources to support intelligent decision-making.
+
+**Why it's interesting:** Traditional recommendation systems rely on simple filters such as distance or product category. The Hyperlocal Knowledge Graph allows the platform to reason over relationships, enabling recommendations that consider both direct and indirect contextual information. This improves personalization, recommendation quality, and operational intelligence.
+
+**Knowledge Graph Entities**
+
+* Customers
+* Merchants
+* Products
+* Categories
+* Delivery Partners
+* Neighborhoods
+* Roads
+* Traffic Conditions
+* Weather
+* Local Events
+* Purchase History
+* Time & Seasonal Trends
+
+**Example Reasoning**
+
+Instead of answering:
+
+> "Show nearby grocery stores."
+
+The system can answer:
+
+> "Recommend a merchant that has all required products in stock, delivers within 20 minutes, is highly rated, offers competitive pricing, and is currently unaffected by traffic congestion."
+
+Similarly, it can infer:
+
+* Alternative merchants when stock is unavailable.
+* Products frequently purchased together.
+* Area-specific demand patterns.
+* Context-aware shopping recommendations.
+
+**Suggested Implementation**
+
+* Neo4j Graph Database
+* GraphRAG for LLM grounding
+* LangChain/LangGraph integration
+* FastAPI Graph Service
+* Cypher Query Engine
+
+The knowledge graph exposes APIs consumed by the Conversational Shopping Agent and Merchant Recommendation Engine, providing semantic context during reasoning and recommendation.
+
+**What to Measure**
+
+* Recommendation precision
+* Graph query latency
+* Context-aware recommendation accuracy
+* Knowledge coverage
+* Reduction in failed recommendations
+* User satisfaction improvement
+
+---
+
+## 3.4 Merchant Recommendation Engine
+
+**What it does:** Instead of ranking merchants solely by geographical distance, the Merchant Recommendation Engine identifies the most suitable merchant for a customer's shopping request using a multi-objective ranking model. The engine balances customer preferences, merchant reliability, inventory availability, delivery performance, and contextual factors to recommend the optimal merchant.
+
+**Why it's interesting:** Existing hyperlocal platforms typically prioritize sponsored merchants or the nearest available store, often resulting in poor customer experiences when products are unavailable or deliveries are delayed. This component formulates merchant recommendation as a **Multi-Criteria Decision-Making (MCDM)** problem, enabling intelligent merchant selection based on multiple quality indicators.
+
+**Ranking Factors**
+
+* Distance from customer
+* Product availability
+* Delivery ETA
+* Merchant ratings
+* Historical order fulfillment rate
+* Pricing competitiveness
+* Inventory freshness
+* Customer preferences
+* Traffic conditions
+* Weather impact
+* Merchant trust score
+
+Each merchant receives a weighted recommendation score, and the highest-ranked merchant is selected.
+
+**Suggested Implementation**
+
+* Learning-to-Rank (LTR) model or weighted scoring algorithm
+* Historical order analytics
+* Customer preference profiling
+* Integration with the Hyperlocal Knowledge Graph
+* Real-time traffic and inventory data
+
+The recommendation engine continuously learns from customer interactions and completed deliveries to improve future merchant rankings.
+
+**What to Measure**
+
+* Top-K recommendation accuracy
+* Average recommendation latency
+* Merchant selection precision
+* Customer satisfaction score
+* Order completion rate
+* Reduction in order cancellations
+* Improvement in delivery success rate
+
+**Research Contribution**
+
+The Merchant Recommendation Engine extends conventional distance-based merchant selection by incorporating semantic knowledge, contextual awareness, and multi-objective optimization. Combined with the Hyperlocal Knowledge Graph, it enables explainable, personalized, and context-aware merchant recommendations that adapt dynamically to real-time operational conditions.
+
 
 ## 4. Build Sequencing
 
